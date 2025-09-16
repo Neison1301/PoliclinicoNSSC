@@ -1,5 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.model;
-
+package com.policlinicoSC.demo.model;
 public class Doctor {
     private int id;
     private String nombre;

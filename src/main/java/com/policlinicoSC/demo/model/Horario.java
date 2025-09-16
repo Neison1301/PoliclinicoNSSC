@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.model;
+package com.policlinicoSC.demo.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

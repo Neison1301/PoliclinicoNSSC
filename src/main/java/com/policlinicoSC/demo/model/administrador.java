@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.model;
+package com.policlinicoSC.demo.model;
 
 public class administrador {
     private int id;

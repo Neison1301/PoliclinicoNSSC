@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.model;
+package com.policlinicoSC.demo.model;
 
 import java.math.BigDecimal;
 
@@ -29,6 +29,7 @@ public class Pago {
     public String getEstado() {
         return estado;
     }
+    
     public void setEstado(String estado) {
         this.estado = estado;
     }
