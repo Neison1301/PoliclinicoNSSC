@@ -1,7 +1,9 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.UsuarioDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Usuario;
+
+import com.policlinicoSC.demo.dao.UsuarioDAO;
+import com.policlinicoSC.demo.model.Usuario;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;

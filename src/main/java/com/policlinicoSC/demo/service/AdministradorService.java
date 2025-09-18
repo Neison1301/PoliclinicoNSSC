@@ -1,10 +1,10 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.AdministradorDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.AdministradorDTO;
+import com.policlinicoSC.demo.dao.AdministradorDAO;
+import com.policlinicoSC.demo.dto.AdministradorDTO;
 
 @Service
 public class AdministradorService {

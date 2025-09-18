@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.DoctorDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.EspecialidadDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.HorarioDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorHorarioDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.HorarioDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Doctor;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Especialidad;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
+import com.policlinicoSC.demo.dao.DoctorDAO;
+import com.policlinicoSC.demo.dao.EspecialidadDAO;
+import com.policlinicoSC.demo.dao.HorarioDAO;
+import com.policlinicoSC.demo.dto.DoctorHorarioDTO;
+import com.policlinicoSC.demo.dto.HorarioDTO;
+import com.policlinicoSC.demo.model.Doctor;
+import com.policlinicoSC.demo.model.Especialidad;
+import com.policlinicoSC.demo.model.Horario;
 
 @Service
 public class HorarioService {

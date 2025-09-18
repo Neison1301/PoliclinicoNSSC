@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
 import java.util.List;
 
@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.RecepcionistaDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.UsuarioDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.RecepcionistaDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Usuario;
+import com.policlinicoSC.demo.dao.RecepcionistaDAO;
+import com.policlinicoSC.demo.dao.UsuarioDAO;
+import com.policlinicoSC.demo.dto.RecepcionistaDTO;
+import com.policlinicoSC.demo.model.Usuario;
 
 @Service
 public class RecepcionistaService {

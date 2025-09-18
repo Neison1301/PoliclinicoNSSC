@@ -1,10 +1,10 @@
-package com.webapplication.PoliclinicoSagradoCorazon.dto;
+package com.policlinicoSC.demo.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
+import com.policlinicoSC.demo.model.Horario;
 
 public class DoctorHorarioDTO {
     private int id;
