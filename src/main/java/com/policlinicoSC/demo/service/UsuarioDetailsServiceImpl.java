@@ -11,17 +11,14 @@ import java.util.Collections;
 @Service
 public class UsuarioDetailsServiceImpl implements UserDetailsService {
 
-    private final UsuarioRepository usuarioRepository;
-
-    public UsuarioDetailsServiceImpl(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private UsuarioDAO usuarioDAO;
 
     @Override
     public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.buscarPorDni(dni);
+        Usuario usuario = usuarioDAO.buscarPorDni(dni);
         if (usuario == null) {
-            throw new UsernameNotFoundException("DNI no encontrado: " + dni);
+            throw new UsernameNotFoundException("DNI no encontrado");
         }
 
         return new User(
