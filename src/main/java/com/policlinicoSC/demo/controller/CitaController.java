@@ -18,10 +18,10 @@ import com.policlinicoSC.demo.dto.RecepcionistaDTO;
 import com.policlinicoSC.demo.model.Cita;
 import com.policlinicoSC.demo.model.Horario;
 import com.policlinicoSC.demo.service.CitaService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.EmailService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.HorarioService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.PacienteService;
+import com.policlinicoSC.demo.service.DoctorService;
+import com.policlinicoSC.demo.service.EmailService;
+import com.policlinicoSC.demo.service.HorarioService;
+import com.policlinicoSC.demo.service.PacienteService;
 
 import jakarta.servlet.http.HttpSession;
 

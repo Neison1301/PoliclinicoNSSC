@@ -1,13 +1,13 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.DoctorDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.EspecialidadDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorDTO;
+import com.policlinicoSC.demo.dao.DoctorDAO;
+import com.policlinicoSC.demo.dao.EspecialidadDAO;
+import com.policlinicoSC.demo.dto.DoctorDTO;
 
 @Service
 public class DoctorService {

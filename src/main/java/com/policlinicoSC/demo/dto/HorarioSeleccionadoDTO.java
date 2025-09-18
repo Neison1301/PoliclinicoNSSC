@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.dto;
+package com.policlinicoSC.demo.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

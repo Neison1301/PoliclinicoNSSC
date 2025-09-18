@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.dto;
+package com.policlinicoSC.demo.dto;
 
 public class DoctorDTO {
     private int id;

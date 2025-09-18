@@ -1,20 +1,18 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.CitaDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.HorarioDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dao.PagoDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.CitaDetalleDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Cita;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Pago;
+import com.policlinicoSC.demo.dao.CitaDAO;
+import com.policlinicoSC.demo.dao.HorarioDAO;
+import com.policlinicoSC.demo.dao.PagoDAO;
+import com.policlinicoSC.demo.dto.CitaDetalleDTO;
+import com.policlinicoSC.demo.model.Cita;
+import com.policlinicoSC.demo.model.Pago;
 
 @Service
 public class CitaService {

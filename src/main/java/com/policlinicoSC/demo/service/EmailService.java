@@ -1,4 +1,5 @@
-package com.webapplication.PoliclinicoSagradoCorazon.service;
+package com.policlinicoSC.demo.service;
+
 
 import org.springframework.stereotype.Service;
 

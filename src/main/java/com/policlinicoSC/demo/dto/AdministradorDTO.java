@@ -1,6 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.dto;
-
-
+package com.policlinicoSC.demo.dto;
 public class AdministradorDTO {
     private int id;
     private String dni;
