@@ -1,7 +1,10 @@
 package com.policlinicoSC.demo.service;
 
-import com.policlinicoSC.demo.repository.UsuarioRepository;
+
+import com.policlinicoSC.demo.dao.UsuarioDAO;
 import com.policlinicoSC.demo.model.Usuario;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;

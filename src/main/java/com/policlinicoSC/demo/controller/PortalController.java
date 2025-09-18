@@ -1,5 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.controller;
-
+package com.policlinicoSC.demo.controller;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,19 +9,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dto.AdministradorDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.CitaDetalleDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.HorarioDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.PacienteDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.RecepcionistaDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Cita;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Especialidad;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
-import com.webapplication.PoliclinicoSagradoCorazon.service.CitaService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.HorarioService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.RecepcionistaService;
+import com.policlinicoSC.demo.dto.AdministradorDTO;
+
+import com.policlinicoSC.demo.dto.CitaDetalleDTO;
+import com.policlinicoSC.demo.dto.DoctorDTO;
+import com.policlinicoSC.demo.dto.HorarioDTO;
+import com.policlinicoSC.demo.dto.PacienteDTO;
+import com.policlinicoSC.demo.dto.RecepcionistaDTO;
+import com.policlinicoSC.demo.model.Cita;
+import com.policlinicoSC.demo.model.Especialidad;
+import com.policlinicoSC.demo.model.Horario;
+import com.policlinicoSC.demo.service.CitaService;
+import com.policlinicoSC.demo.service.DoctorService;
+import com.policlinicoSC.demo.service.HorarioService;
+import com.policlinicoSC.demo.service.RecepcionistaService;
 
 import jakarta.servlet.http.HttpSession;
 

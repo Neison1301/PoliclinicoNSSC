@@ -1,5 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.controller;
-
+package com.policlinicoSC.demo.controller;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.PacienteDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.RecepcionistaDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Cita;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Doctor;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Paciente1;
-import com.webapplication.PoliclinicoSagradoCorazon.service.CitaService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.EmailService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.HorarioService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.PacienteService;
+import com.policlinicoSC.demo.dto.DoctorDTO;
+import com.policlinicoSC.demo.dto.PacienteDTO;
+import com.policlinicoSC.demo.dto.RecepcionistaDTO;
+import com.policlinicoSC.demo.model.Horario;
+import com.policlinicoSC.demo.model.Paciente1;
+import com.policlinicoSC.demo.service.CitaService;
+import com.policlinicoSC.demo.service.DoctorService;
+import com.policlinicoSC.demo.service.EmailService;
+import com.policlinicoSC.demo.service.HorarioService;
+import com.policlinicoSC.demo.service.PacienteService;
 
 import jakarta.servlet.http.HttpSession;
 

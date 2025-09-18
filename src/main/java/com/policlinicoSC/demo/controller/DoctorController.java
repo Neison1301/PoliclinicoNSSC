@@ -1,4 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.controller;
+package com.policlinicoSC.demo.controller;
 
 import java.util.List;
 
@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.policlinicoSC.demo.dto.DoctorDTO;
 import com.policlinicoSC.demo.model.Especialidad;
-import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.EspecialidadService;
+import com.policlinicoSC.demo.service.DoctorService;
+
+import com.policlinicoSC.demo.service.EspecialidadService;
 
 import jakarta.servlet.http.HttpSession;
 

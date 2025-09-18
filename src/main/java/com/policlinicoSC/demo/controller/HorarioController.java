@@ -1,5 +1,4 @@
-package com.webapplication.PoliclinicoSagradoCorazon.controller;
-
+package com.policlinicoSC.demo.controller;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,7 +7,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dao.EspecialidadDAO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorHorarioDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.HorarioDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.HorarioSeleccionadoDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.PacienteDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.dto.RecepcionistaDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Horario;
-import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
-import com.webapplication.PoliclinicoSagradoCorazon.service.HorarioService;
-import org.springframework.security.core.Authentication;
+import com.policlinicoSC.demo.dao.EspecialidadDAO;
+
+import com.policlinicoSC.demo.dto.DoctorDTO;
+import com.policlinicoSC.demo.dto.DoctorHorarioDTO;
+import com.policlinicoSC.demo.dto.HorarioDTO;
+import com.policlinicoSC.demo.dto.HorarioSeleccionadoDTO;
+import com.policlinicoSC.demo.dto.PacienteDTO;
+import com.policlinicoSC.demo.dto.RecepcionistaDTO;
+import com.policlinicoSC.demo.model.Horario;
+import com.policlinicoSC.demo.service.DoctorService;
+import com.policlinicoSC.demo.service.HorarioService;
 
 import jakarta.servlet.http.HttpSession;
 
