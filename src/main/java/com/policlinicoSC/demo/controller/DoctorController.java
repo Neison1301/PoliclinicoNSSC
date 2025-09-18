@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.webapplication.PoliclinicoSagradoCorazon.dto.DoctorDTO;
-import com.webapplication.PoliclinicoSagradoCorazon.model.Especialidad;
+import com.policlinicoSC.demo.dto.DoctorDTO;
+import com.policlinicoSC.demo.model.Especialidad;
 import com.webapplication.PoliclinicoSagradoCorazon.service.DoctorService;
 import com.webapplication.PoliclinicoSagradoCorazon.service.EspecialidadService;
 
