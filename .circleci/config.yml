@@ -3,7 +3,7 @@ jobs:
   # Job 1: Construcción y Prueba (CI)
   build:
     docker:
-      - image: cimg/openjdk:17.0-maven
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       
