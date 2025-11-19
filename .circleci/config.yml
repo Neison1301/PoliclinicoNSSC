@@ -1,0 +1,34 @@
+version: 2.1
+jobs:
+  # Definición del Job 'build'
+  build:
+    docker:
+      - image: cimg/node:16.13 # Usa una imagen de Node.js 16 para el entorno
+    steps:
+      - checkout # Clona el código del repositorio
+      - run:
+          name: Instalar dependencias
+          command: npm install
+      - run:
+          name: Construir el proyecto
+          [cite_start]command: npm run build # Ejecuta el script 'build' del package.json [cite: 149, 150]
+
+  # Definición del Job 'test'
+  test:
+    docker:
+      - image: cimg/node:16.13 # Usa la misma imagen de Node.js
+    steps:
+      - checkout
+      - run:
+          name: Ejecutar pruebas
+          [cite_start]command: npm test # Ejecuta el script 'test' del package.json [cite: 159]
+
+# Definición del Workflow (Flujo de Trabajo)
+workflows:
+  version: 2
+  build_and_test: # Nombre del workflow
+    jobs:
+      - build # Ejecuta el job 'build'
+      - test:
+          requires:
+            - [cite_start]build # El job 'test' requiere que 'build' haya terminado antes de comenzar [cite: 166, 167]
