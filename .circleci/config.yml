@@ -40,10 +40,10 @@ jobs:
             
             # Comando de despliegue usando scp para transferir el JAR
             # Reemplaza USER, HOST y RUTA_REMOTO con tus datos
-            scp target/*.jar USER@HOST:RUTA_REMOTO/policlinico-app.jar
+            scp target/*.jar neison_admin@192.168.1.100:/var/www/staging/policlinico-app.jar
             
             # Comando para reiniciar el servicio remoto (ej. con SSH)
-            ssh USER@HOST "sudo systemctl restart policlinico-app.service"
+            ssh neison_admin@192.168.1.100 "sudo systemctl restart policlinico-app.service"
 
 # Workflow: Define la secuencia de CI -> CD
 workflows:
@@ -51,6 +51,4 @@ workflows:
   ci_cd_full: # Nuevo nombre para el workflow
     jobs:
       - build # Ejecuta el Job de CI primero
-      - deploy: # Ejecuta el Job de CD después
-          requires:
-            - build # El despliegue requiere que la construcción haya sido exitosa
+      
