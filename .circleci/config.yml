@@ -1,34 +1,55 @@
 version: 2.1
 jobs:
-  # Definición del Job 'build'
+  # Job 1: Construcción y Prueba (CI)
   build:
     docker:
-      - image: cimg/node:16.13 # Usa una imagen de Node.js 16 para el entorno
-    steps:
-      - checkout # Clona el código del repositorio
-      - run:
-          name: Instalar dependencias
-          command: npm install
-      - run:
-          name: Construir el proyecto
-          [cite_start]command: npm run build # Ejecuta el script 'build' del package.json [cite: 149, 150]
-
-  # Definición del Job 'test'
-  test:
-    docker:
-      - image: cimg/node:16.13 # Usa la misma imagen de Node.js
+      - image: cimg/openjdk:17.0-maven
     steps:
       - checkout
+      
+      # 1. Ejecutar Build y Pruebas
       - run:
-          name: Ejecutar pruebas
-          [cite_start]command: npm test # Ejecuta el script 'test' del package.json [cite: 159]
+          name: Build, Test and Package (CI)
+          command: mvn -B -DskipTests=false package 
+          
+      # 2. Persistir el Artefacto (el archivo .jar o .war)
+      # Esto guarda el archivo generado para que el Job 'deploy' pueda usarlo.
+      - persist_to_workspace:
+          root: target
+          paths:
+            - "*.jar" # Ajusta a "*.war" si es necesario
+            
+  # Job 2: Despliegue a Staging (CD)
+  deploy:
+    docker:
+      # Usamos una imagen base ligera para el despliegue
+      - image: cimg/base:2023.11
+    steps:
+      # 1. Adjuntar el Artefacto del Job 'build'
+      - attach_workspace:
+          at: target
+          
+      # 2. Desplegar mediante SSH
+      # Asegúrate de haber configurado el 'ssh-key' en las variables de CircleCI
+      - run:
+          name: Deploy to Staging (CD)
+          command: |
+            # Instala la herramienta para la conexión SSH (si no está disponible)
+            sudo apt-get update && sudo apt-get install openssh-client -y
+            
+            # Comando de despliegue usando scp para transferir el JAR
+            # Reemplaza USER, HOST y RUTA_REMOTO con tus datos
+            scp target/*.jar USER@HOST:RUTA_REMOTO/policlinico-app.jar
+            
+            # Comando para reiniciar el servicio remoto (ej. con SSH)
+            ssh USER@HOST "sudo systemctl restart policlinico-app.service"
 
-# Definición del Workflow (Flujo de Trabajo)
+# Workflow: Define la secuencia de CI -> CD
 workflows:
   version: 2
-  build_and_test: # Nombre del workflow
+  ci_cd_full: # Nuevo nombre para el workflow
     jobs:
-      - build # Ejecuta el job 'build'
-      - test:
+      - build # Ejecuta el Job de CI primero
+      - deploy: # Ejecuta el Job de CD después
           requires:
-            - [cite_start]build # El job 'test' requiere que 'build' haya terminado antes de comenzar [cite: 166, 167]
+            - build # El despliegue requiere que la construcción haya sido exitosa
