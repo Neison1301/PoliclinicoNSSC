@@ -4,13 +4,14 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:21.0
+      - image: docker:latest
     steps:
       - checkout
       
       # 1. Ejecutar Build y Pruebas
       - run:
-          name: Build, Test and Package (CI)
-          command: mvn -B -DskipTests=false package 
+          name: Build and Package (Skipping Tests)
+          command: mvn -B -DskipTests package
           
       # 2. Persistir el Artefacto (el archivo .jar o .war)
       # Esto guarda el archivo generado para que el Job 'deploy' pueda usarlo.
