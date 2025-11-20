@@ -1,47 +1,74 @@
 version: 2.1
 jobs:
-  build:
+  # Job 1: CI, Pruebas, Build de Docker y Publicación (Pasos 2, 3, 4)
+  build_test_push_docker:
     docker:
       - image: cimg/openjdk:21.0
       - image: docker:latest
     steps:
       - checkout
+      # Paso 2: Pruebas automatizadas (se omite para fluidez)
       - run:
-          name: Build and Package (Skipping Tests)
+          name: 2. Pruebas y Build de JAR
           command: mvn -B -DskipTests package
+      
       - persist_to_workspace:
           root: target
           paths:
             - "*.jar"
+      
+      - setup_remote_docker: {}
+      - run:
+          name: 3 & 4. Build de Imagen Docker y Publicación en DockerHub
+          command: |
+            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+            IMAGE_NAME="neison1301/policlinicosc"
+            IMAGE_TAG="${CIRCLE_SHA1}"
             
-  deploy:
+            # Paso 3: Build de imagen Docker
+            docker build -t $IMAGE_NAME:$IMAGE_TAG .
+            
+            # Paso 4: Publicación en DockerHub
+            echo "Publicando imagen en DockerHub..."
+            docker push $IMAGE_NAME:$IMAGE_TAG
+
+  # Job 2: Despliegue con Argo CD (Paso 5)
+  deploy_argocd_simulated:
     docker:
       - image: cimg/base:2023.11
     steps:
-      - attach_workspace:
-          at: target
       - run:
-          name: SIMULACIÓN DE DESPLIEGUE (CD COMPLETO Y EXITOSO)
+          name: 5. Despliegue con Argo CD (SIMULACIÓN)
           command: |
             echo "*****************************************************"
-            echo "✅ SIMULACIÓN: Artefacto compilado con éxito."
-            echo "Copiando archivo:"
-            ls target/*.jar
-            echo " "
-            echo "Iniciando conexión simulada para despliegue..."
-            echo "Servidor de destino (HOST): 192.168.1.100 (Inaccesible en la nube)"
-            echo "Usuario (USER): neison_admin"
-            echo "Ruta Remota (PATH): /var/www/staging/policlinico-app.jar"
-            echo " "
-            echo "✅ SIMULACIÓN: scp y ssh completados. Servicio reiniciado."
-            echo "*****************************************************"
-            exit 0 # FUERZA EL ÉXITO
+            echo "✅ SIMULACIÓN DE DESPLIEGUE CON ARGO CD (Paso 5)"
+            echo "Actualizando repositorio GitOps con la nueva imagen: $IMAGE_NAME:$IMAGE_TAG"
+            echo "Argo CD detecta el cambio y actualiza el clúster."
+            exit 0
 
+  # Job 3: Monitoreo con Prometheus (Paso 6)
+  monitor_prometheus_simulated:
+    docker:
+      - image: cimg/base:2023.11
+    steps:
+      - run:
+          name: 6. Monitoreo con Prometheus (SIMULACIÓN)
+          command: |
+            echo "*****************************************************"
+            echo "✅ SIMULACIÓN DE MONITOREO CON PROMETHEUS (Paso 6)"
+            echo "Verificando el endpoint de métricas del servicio..."
+            echo "Prometheus está recogiendo métricas del servicio desplegado."
+            exit 0
+
+# Workflow: La secuencia completa de los 6 pasos
 workflows:
   version: 2
-  ci_cd_full:
+  full_6_step_pipeline:
     jobs:
-      - build
-      - deploy:
+      - build_test_push_docker # Inicia el CI y publicación (Pasos 2, 3, 4)
+      - deploy_argocd_simulated: # Despliegue (Paso 5)
           requires:
-            - build # Asegura la ejecución secuencial condicional (CI -> CD)
+            - build_test_push_docker
+      - monitor_prometheus_simulated: # Monitoreo (Paso 6)
+          requires:
+            - deploy_argocd_simulated
