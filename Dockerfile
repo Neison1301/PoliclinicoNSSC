@@ -1,13 +1,12 @@
-# Stage 1: Build the JAR (Aunque CircleCI ya lo hace, es una buena práctica incluir esta etapa)
-FROM openjdk:21-jdk-slim-bullseye AS builder
+# Stage 1: Build the JAR (Usaremos una imagen base más simple y directa de JDK 21)
+FROM openjdk:21 AS builder
 WORKDIR /app
 
 # Copia el JAR generado por Maven en el Job 'build' de CircleCI
-# Nota: La ruta 'target/*.jar' asume que el JAR fue creado por Maven
 COPY target/*.jar app.jar
 
-# Stage 2: Create the final, smaller runtime image
-FROM openjdk:21-jre-slim-bullseye
+# Stage 2: Create the final, smaller runtime image (Usaremos la JRE más simple y directa)
+FROM openjdk:21-jre
 WORKDIR /app
 
 # Copia el JAR del stage 'builder'

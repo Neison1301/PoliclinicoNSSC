@@ -1,74 +1,83 @@
 version: 2.1
 jobs:
-  # Job 1: CI, Pruebas, Build de Docker y Publicación (Pasos 2, 3, 4)
-  build_test_push_docker:
+  # Job 1: CI - Compilación y JAR (Pasos 1 & 2)
+  ci_maven_build:
     docker:
-      - image: cimg/openjdk:21.0
-      - image: docker:latest
+      - image: cimg/openjdk:21.0 # Entorno estable para Maven y Java
     steps:
       - checkout
-      # Paso 2: Pruebas automatizadas (se omite para fluidez)
       - run:
-          name: 2. Pruebas y Build de JAR
+          name: 1 & 2. CI - Compilación y Pruebas de Maven
+          # Genera el JAR y omite pruebas de BD
           command: mvn -B -DskipTests package
       
+      # Persiste el JAR compilado para el siguiente Job (Docker)
       - persist_to_workspace:
           root: target
           paths:
             - "*.jar"
-      
-      - setup_remote_docker: {}
+
+  # Job 2: DOCKER - Build y Push (Pasos 3 & 4)
+  docker_build_and_push:
+    docker:
+      # Usa cimg/base para comandos de bash y Docker
+      - image: cimg/base:2023.11 
+    steps:
+      - checkout
+      # Recupera el JAR generado por el Job 'ci_maven_build'
+      - attach_workspace:
+          at: target
+      - setup_remote_docker: {} # Inicia el entorno Docker-in-Docker (dind)
       - run:
           name: 3 & 4. Build de Imagen Docker y Publicación en DockerHub
           command: |
+            # Autenticación con secretos de CircleCI
+            echo "Iniciando autenticación en Docker Hub..."
             echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+
             IMAGE_NAME="neison1301/policlinicosc"
             IMAGE_TAG="${CIRCLE_SHA1}"
             
-            # Paso 3: Build de imagen Docker
+            # Paso 3: Build de imagen Docker (Usando la etiqueta OpenJDK más simple y estable)
             docker build -t $IMAGE_NAME:$IMAGE_TAG .
             
             # Paso 4: Publicación en DockerHub
-            echo "Publicando imagen en DockerHub..."
+            echo "Publicando imagen en DockerHub: $IMAGE_NAME:$IMAGE_TAG"
             docker push $IMAGE_NAME:$IMAGE_TAG
+            echo " Publicación de imagen Docker completada."
 
-  # Job 2: Despliegue con Argo CD (Paso 5)
-  deploy_argocd_simulated:
+  # Job 3: CD - Despliegue y Monitoreo Simulado (Pasos 5 & 6)
+  cd_argocd_prometheus_simulated:
     docker:
       - image: cimg/base:2023.11
     steps:
+      # Paso 5: Despliegue con Argo CD (Simulación)
       - run:
           name: 5. Despliegue con Argo CD (SIMULACIÓN)
           command: |
-            echo "*****************************************************"
-            echo "✅ SIMULACIÓN DE DESPLIEGUE CON ARGO CD (Paso 5)"
-            echo "Actualizando repositorio GitOps con la nueva imagen: $IMAGE_NAME:$IMAGE_TAG"
-            echo "Argo CD detecta el cambio y actualiza el clúster."
+            echo "*************************************************"
+            echo " CD: Simulación de Despliegue con Argo CD (Paso 5)"
+            echo "El sistema GitOps fue notificado y el Despliegue está en curso."
             exit 0
-
-  # Job 3: Monitoreo con Prometheus (Paso 6)
-  monitor_prometheus_simulated:
-    docker:
-      - image: cimg/base:2023.11
-    steps:
+            
+      # Paso 6: Monitoreo con Prometheus (Simulación)
       - run:
           name: 6. Monitoreo con Prometheus (SIMULACIÓN)
           command: |
-            echo "*****************************************************"
-            echo "✅ SIMULACIÓN DE MONITOREO CON PROMETHEUS (Paso 6)"
-            echo "Verificando el endpoint de métricas del servicio..."
-            echo "Prometheus está recogiendo métricas del servicio desplegado."
+            echo "*************************************************"
+            echo "Monitoreo con Prometheus (Paso 6)"
+            echo "Verificando el estado del servicio desplegado en Prometheus."
             exit 0
-
+            
 # Workflow: La secuencia completa de los 6 pasos
 workflows:
   version: 2
   full_6_step_pipeline:
     jobs:
-      - build_test_push_docker # Inicia el CI y publicación (Pasos 2, 3, 4)
-      - deploy_argocd_simulated: # Despliegue (Paso 5)
+      - ci_maven_build # CI (Pasos 1 & 2)
+      - docker_build_and_push: # Docker (Pasos 3 & 4)
           requires:
-            - build_test_push_docker
-      - monitor_prometheus_simulated: # Monitoreo (Paso 6)
+            - ci_maven_build
+      - cd_argocd_prometheus_simulated: # CD y Monitoreo (Pasos 5 & 6)
           requires:
-            - deploy_argocd_simulated
+            - docker_build_and_push # Se ejecuta solo si la Imagen Docker fue creada
