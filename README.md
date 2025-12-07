@@ -4,242 +4,473 @@
 
 Un sistema completo desarrollado con Spring Boot y tecnologías Java para gestionar pacientes, citas médicas, historiales clínicos, personal médico y generar reportes administrativos con un dashboard intuitivo para centros de salud.
 
-![Java](https://img.shields.io/badge/Java-11+-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7+-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.0+-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.0+-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.3-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
+---
 
-## 📋 Requisitos Previos del Sistema
+## 📋 Tabla de Contenidos
 
-Antes de comenzar, asegúrate de tener instalado en tu equipo:
+- [Características](#-características)
+- [Arquitectura Docker](#-arquitectura-docker)
+- [Requisitos Previos](#-requisitos-previos)
+- [Instalación con Docker](#-instalación-con-docker-recomendado)
+- [Instalación Manual](#-instalación-manual-sin-docker)
+- [Uso de la Aplicación](#-uso-de-la-aplicación)
+- [Variables de Entorno](#-variables-de-entorno)
+- [Scripts Disponibles](#-scripts-disponibles)
+- [Troubleshooting](#-troubleshooting)
+- [Colaboración](#-colaboración)
 
-- *Java JDK 17 o superior*
-- *Maven 3.6+* para gestión de dependencias
-- *MySQL 8.0+* como servidor de base de datos
-- *Git* para control de versiones
-- *IDE* (IntelliJ IDEA, Eclipse, o VS Code con extensión Java)
+---
 
-bash
+## ✨ Características
+
+- 👥 **Gestión de Pacientes**: Registro, actualización y consulta de información de pacientes
+- 📅 **Sistema de Citas**: Programación y seguimiento de citas médicas
+- 📋 **Historiales Clínicos**: Registro completo de consultas y tratamientos
+- 👨‍⚕️ **Gestión de Personal**: Administración de médicos y personal de salud
+- 📊 **Dashboard Administrativo**: Reportes y estadísticas en tiempo real
+- 🔐 **Sistema de Autenticación**: Control de acceso basado en roles
+- 📧 **Notificaciones por Email**: Confirmaciones y recordatorios automáticos
+
+---
+
+## 🐳 Arquitectura Docker
+
+El sistema está completamente contenerizado con Docker, garantizando portabilidad y facilidad de despliegue:
+
+```
+┌─────────────────────────────────────────────────┐
+│           Docker Compose Orchestration          │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  ┌──────────────────┐    ┌──────────────────┐  │
+│  │   Spring Boot    │    │   MySQL 8.0      │  │
+│  │   Application    │◄───┤   Database       │  │
+│  │   Port: 8080     │    │   Port: 3307     │  │
+│  └──────────────────┘    └──────────────────┘  │
+│           │                       │             │
+│           └───────────┬───────────┘             │
+│                policlinico-network              │
+│                                                 │
+│  Volúmenes Persistentes:                        │
+│  └─ mysql-data (Base de datos)                  │
+└─────────────────────────────────────────────────┘
+```
+
+**Servicios:**
+- **app**: Aplicación Spring Boot (Java 21)
+- **mysql-db**: Base de datos MySQL 8.0
+
+**Características Docker:**
+- ✅ Multi-stage build para optimización de imagen
+- ✅ Health checks automáticos
+- ✅ Persistencia de datos con volúmenes
+- ✅ Red interna aislada
+- ✅ Variables de entorno configurables
+- ✅ Usuario no-root para seguridad
+
+---
+
+## 📋 Requisitos Previos
+
+### Para Despliegue con Docker (Recomendado)
+- **Docker Desktop** 20.10+ ([Descargar](https://www.docker.com/products/docker-desktop))
+- **Docker Compose** 2.0+ (incluido en Docker Desktop)
+- **Git** para clonar el repositorio
+
+### Para Desarrollo Local (Sin Docker)
+- **Java JDK 21** o superior
+- **Maven 3.6+**
+- **MySQL 8.0+**
+- **Git**
+
+```bash
 # Verificar versiones instaladas
-java -version
-mvn -version
-mysql --version
+docker --version
+docker-compose --version
 git --version
+```
 
+---
 
-## 🚀 Guía de Instalación Completa
+## 🚀 Instalación con Docker (RECOMENDADO)
 
-### Paso 1: Preparación del Entorno
+### Paso 1: Clonar el Repositorio
 
-#### 1.1 Verificar Java JDK
-bash
-# Verificar versión de Java
-java -version
-
-# Verificar variable JAVA_HOME
-echo $JAVA_HOME
-
-
-#### 1.2 Configurar MySQL
-sql
--- Crear base de datos
-CREATE DATABASE policlinico_nssc;
-
--- Crear usuario específico (opcional)
-CREATE USER 'policlinico_user'@'localhost' IDENTIFIED BY 'policlinico_password';
-GRANT ALL PRIVILEGES ON policlinico_nssc.* TO 'policlinico_user'@'localhost';
-FLUSH PRIVILEGES;
-
-
-### Paso 2: Clonación del Repositorio
-
-#### 2.1 Clonar el Proyecto
-bash
+```bash
 git clone https://github.com/Neison1301/PoliclinicoNSSC.git
-
-
-#### 2.2 Acceder al Directorio del Proyecto
-bash
 cd PoliclinicoNSSC
+```
 
+### Paso 2: Configurar Variables de Entorno
 
-### Paso 3: Configuración del Entorno Local
+```bash
+# Copiar el archivo de ejemplo
+copy .env.example .env
 
-#### 3.1 Configurar Git (Solo primera vez)
-bash
-# Configurar nombre de usuario
-git config --global user.name "Tu Nombre"
+# Editar el archivo .env con tus credenciales
+notepad .env
+```
 
-# Configurar email
-git config --global user.email "tu.email@ejemplo.com"
+**Configuración mínima requerida en `.env`:**
+```env
+MYSQL_ROOT_PASSWORD=tu_password_seguro
+MYSQL_DATABASE=policlinicosagrado
+MYSQL_USER=policlinico_user
+MYSQL_PASSWORD=tu_password_db
 
+MAIL_USERNAME=tu_email@gmail.com
+MAIL_PASSWORD=tu_password_app
+```
 
-#### 3.2 Verificar Configuración de Ramas
-bash
-# Ver rama actual
-git branch
+### Paso 3: Construir e Iniciar
 
-# Ver todas las ramas
-git branch -a
+#### Opción A: Usando Scripts (Windows)
 
-# Cambiar a rama principal (si no está activa)
-git checkout master
+```bash
+# 1. Construir las imágenes
+build.bat
 
+# 2. Iniciar la aplicación
+start.bat
+```
 
-### Paso 4: Configuración de la Base de Datos
+#### Opción B: Usando Docker Compose Directamente
 
-#### 4.1 Configurar application.properties
-properties
+```bash
+# 1. Compilar la aplicación
+mvnw.cmd clean package -DskipTests
+
+# 2. Construir las imágenes
+docker-compose build
+
+# 3. Iniciar los contenedores
+docker-compose up -d
+
+# 4. Ver logs en tiempo real
+docker-compose logs -f
+```
+
+### Paso 4: Verificar el Despliegue
+
+```bash
+# Ver estado de los contenedores
+docker-compose ps
+
+# Verificar logs
+docker-compose logs app
+docker-compose logs mysql-db
+
+# Verificar health checks
+docker inspect policlinico-app --format='{{.State.Health.Status}}'
+```
+
+### Paso 5: Acceder a la Aplicación
+
+- **URL Principal**: http://localhost:8080/policlinico
+- **Health Check**: http://localhost:8080/policlinico/actuator/health
+- **MySQL**: `localhost:3307` (usuario: policlinico_user)
+
+**Credenciales de Acceso:**
+- Usuario: `admin`
+- Contraseña: `admin123`
+
+---
+
+## 🛠️ Instalación Manual (Sin Docker)
+
+<details>
+<summary>Click para expandir instrucciones de instalación manual</summary>
+
+### Paso 1: Configurar MySQL
+
+```sql
+-- Crear base de datos
+CREATE DATABASE policlinicosagrado;
+
+-- Crear usuario
+CREATE USER 'policlinico_user'@'localhost' IDENTIFIED BY 'policlinico_pass';
+GRANT ALL PRIVILEGES ON policlinicosagrado.* TO 'policlinico_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### Paso 2: Configurar application.properties
+
+```properties
 # src/main/resources/application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/policlinicosagrado
+spring.datasource.username=policlinico_user
+spring.datasource.password=policlinico_pass
+```
 
-# Configuración de la base de datos MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/policlinico_nssc?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=tu_password_mysql
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+### Paso 3: Compilar y Ejecutar
 
-# Configuración JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-spring.jpa.show-sql=true
-spring.jpa.format-sql=true
+```bash
+# Compilar
+mvnw.cmd clean package
 
-# Configuración del servidor
-server.port=8080
-server.servlet.context-path=/policlinico
+# Ejecutar
+java -jar target/PoliclinicoSagradoCorazon-0.0.1-SNAPSHOT.jar
+```
 
-# Configuración Thymeleaf
-spring.thymeleaf.cache=false
-spring.thymeleaf.enabled=true
-spring.thymeleaf.prefix=classpath:/templates/
-spring.thymeleaf.suffix=.html
+</details>
 
+---
 
-#### 4.2 Configurar application-dev.properties (Entorno de Desarrollo)
-properties
-# src/main/resources/application-dev.properties
+## 📱 Uso de la Aplicación
 
-# Configuración específica para desarrollo
-logging.level.org.springframework.web=DEBUG
-logging.level.org.hibernate.SQL=DEBUG
-spring.jpa.properties.hibernate.format_sql=true
+### Endpoints Principales
 
+| Endpoint | Descripción | Método |
+|----------|-------------|--------|
+| `/policlinico` | Página principal | GET |
+| `/policlinico/login` | Inicio de sesión | GET/POST |
+| `/policlinico/dashboard` | Panel administrativo | GET |
+| `/policlinico/pacientes` | Gestión de pacientes | GET/POST |
+| `/policlinico/citas` | Gestión de citas | GET/POST |
+| `/policlinico/actuator/health` | Estado de salud | GET |
 
-### Paso 5: Instalación de Dependencias
+### Roles y Permisos
 
-bash
-# Limpiar e instalar dependencias
-mvn clean install
+- **ADMIN**: Acceso completo al sistema
+- **DOCTOR**: Gestión de pacientes y citas
+- **RECEPCIONISTA**: Registro de pacientes y citas
 
+---
 
-### Paso 6: Ejecución del Sistema
+## 🔐 Variables de Entorno
 
-#### 6.1 Compilar el Proyecto
-bash
-# Compilar sin ejecutar tests
-mvn clean compile
+### Variables de Base de Datos
 
-# Compilar con tests
-mvn clean test
+| Variable | Descripción | Valor por Defecto |
+|----------|-------------|-------------------|
+| `MYSQL_ROOT_PASSWORD` | Contraseña root de MySQL | `rootpassword` |
+| `MYSQL_DATABASE` | Nombre de la base de datos | `policlinicosagrado` |
+| `MYSQL_USER` | Usuario de la aplicación | `policlinico_user` |
+| `MYSQL_PASSWORD` | Contraseña del usuario | `policlinico_pass` |
 
+### Variables de Email
 
-#### 6.2 Iniciar la Aplicación
-bash
-# Opción 1: Usar Maven
-mvn spring-boot:run
+| Variable | Descripción | Valor por Defecto |
+|----------|-------------|-------------------|
+| `MAIL_HOST` | Servidor SMTP | `smtp.gmail.com` |
+| `MAIL_PORT` | Puerto SMTP | `587` |
+| `MAIL_USERNAME` | Email del remitente | - |
+| `MAIL_PASSWORD` | Contraseña de aplicación | - |
 
-# Opción 2: Usar Java directamente
-java -jar target/policlinico-nssc-1.0.0.jar
+### Variables de Spring
 
-# Opción 3: Desde IDE (IntelliJ/Eclipse)
-# Ejecutar la clase principal con @SpringBootApplication
+| Variable | Descripción | Valor por Defecto |
+|----------|-------------|-------------------|
+| `SPRING_PROFILES_ACTIVE` | Perfil activo | `prod` |
 
+---
 
-#### 6.3 Verificar que el Sistema Está Funcionando
-- Abrir navegador web
-- Navegar a: http://localhost:8080/policlinico
-- Verificar que la página de login aparezca correctamente
+## 📜 Scripts Disponibles
 
-### Paso 7: Credenciales de Acceso
+### Windows (`.bat`)
 
+| Script | Comando | Descripción |
+|--------|---------|-------------|
+| **Build** | `build.bat` | Compila y construye las imágenes Docker |
+| **Start** | `start.bat` | Inicia los contenedores |
+| **Stop** | `stop.bat` | Detiene los contenedores |
+| **Cleanup** | `cleanup.bat` | Elimina contenedores, imágenes y volúmenes |
 
+### Comandos Docker Compose
 
-👩‍💼 Usuario Administrador:
-- Usuario: admin
-- Contraseña: admin123
+```bash
+# Iniciar en modo detached
+docker-compose up -d
 
+# Ver logs en tiempo real
+docker-compose logs -f
 
+# Ver logs de un servicio específico
+docker-compose logs -f app
 
-## 🔧 Configuración para Colaboradores
+# Detener servicios
+docker-compose stop
 
-### Creación de Ramas de Trabajo
+# Detener y eliminar contenedores
+docker-compose down
 
-#### Para Nuevas Funcionalidades
-bash
-# Crear rama para nueva funcionalidad
-git checkout -b feature/nueva-funcionalidad
+# Detener y eliminar contenedores + volúmenes
+docker-compose down -v
 
-# Ejemplo: Agregar módulo de farmacia
-git checkout -b feature/modulo-farmacia
+# Reconstruir imágenes
+docker-compose build --no-cache
 
+# Ver estado de servicios
+docker-compose ps
 
-#### Para Corrección de Errores
-bash
-# Crear rama para corrección
-git checkout -b bugfix/descripcion-error
+# Ejecutar comando en contenedor
+docker-compose exec app bash
+```
 
-# Ejemplo: Corregir error en citas
-git checkout -b bugfix/error-citas-duplicadas
+---
 
+## 🔧 Troubleshooting
 
-#### Para Mejoras
-bash
-# Crear rama para mejoras
-git checkout -b improvement/descripcion-mejora
+### Problema: Puerto 8080 ya está en uso
 
-# Ejemplo: Mejorar interfaz de usuario
-git checkout -b improvement/ui-dashboard
+```bash
+# Windows: Encontrar proceso usando el puerto
+netstat -ano | findstr :8080
 
+# Matar el proceso (reemplaza PID)
+taskkill /PID <PID> /F
 
-### Flujo de Trabajo Colaborativo
+# O cambiar el puerto en docker-compose.yml
+ports:
+  - "8081:8080"  # Usar puerto 8081 externamente
+```
 
-#### 1. Actualizar Código Local
-bash
-# Cambiar a rama master
+### Problema: Puerto 3307 ya está en uso
+
+```bash
+# Cambiar el puerto de MySQL en docker-compose.yml
+ports:
+  - "3308:3306"  # Usar puerto 3308 externamente
+```
+
+### Problema: Error de conexión a MySQL
+
+```bash
+# Verificar que MySQL esté saludable
+docker-compose ps
+
+# Ver logs de MySQL
+docker-compose logs mysql-db
+
+# Reiniciar solo MySQL
+docker-compose restart mysql-db
+
+# Esperar a que MySQL esté listo
+docker-compose up -d mysql-db
+timeout /t 30
+docker-compose up -d app
+```
+
+### Problema: Aplicación no inicia
+
+```bash
+# Ver logs detallados
+docker-compose logs -f app
+
+# Verificar variables de entorno
+docker-compose config
+
+# Reconstruir desde cero
+docker-compose down -v
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+### Problema: Datos perdidos después de reiniciar
+
+```bash
+# Verificar que el volumen existe
+docker volume ls | findstr policlinico
+
+# Inspeccionar el volumen
+docker volume inspect policlinico-mysql-data
+
+# NO uses 'docker-compose down -v' si quieres mantener los datos
+# Usa solo 'docker-compose down'
+```
+
+### Problema: Error de compilación Maven
+
+```bash
+# Limpiar caché de Maven
+mvnw.cmd clean
+
+# Compilar sin tests
+mvnw.cmd clean package -DskipTests
+
+# Verificar Java version
+java -version  # Debe ser 21+
+```
+
+---
+
+## 🤝 Colaboración
+
+### Flujo de Trabajo con Git
+
+```bash
+# 1. Actualizar código local
 git checkout master
-
-# Obtener últimos cambios
 git pull origin master
 
-
-#### 2. Trabajar en Nueva Funcionalidad
-bash
-# Crear y cambiar a nueva rama
+# 2. Crear rama para nueva funcionalidad
 git checkout -b feature/mi-funcionalidad
 
-# Realizar cambios en el código
-# ... hacer modificaciones ...
-
-# Agregar cambios
+# 3. Realizar cambios y commit
 git add .
+git commit -m "feat: Descripción de cambios"
 
-# Confirmar cambios
-git commit -m "feat: Descripción clara de los cambios realizados"
-
-
-#### 3. Enviar Cambios al Repositorio
-bash
-# Subir rama al repositorio remoto
+# 4. Subir cambios
 git push origin feature/mi-funcionalidad
 
-``
+# 5. Crear Pull Request en GitHub
+```
+
+### Convenciones de Commits
+
+- `feat:` Nueva funcionalidad
+- `fix:` Corrección de errores
+- `docs:` Cambios en documentación
+- `style:` Formato de código
+- `refactor:` Refactorización
+- `test:` Agregar tests
+- `chore:` Tareas de mantenimiento
+
+---
 
 ## 📞 Soporte y Contacto
 
-- *Repositorio*: https://github.com/Neison1301/PoliclinicoNSSC.git
-- *Issues*: Reportar problemas en GitHub Issues
-- *Documentación*: Consultar la wiki del proyecto
+- **Repositorio**: https://github.com/Neison1301/PoliclinicoNSSC.git
+- **Issues**: [Reportar problemas](https://github.com/Neison1301/PoliclinicoNSSC/issues)
+- **Documentación**: Consultar la wiki del proyecto
 
-🏥 *Sistema desarrollado para mejorar la gestión de centros de salud con tecnología Java*
+---
+
+## 📄 Licencia
+
+Este proyecto es desarrollado con fines académicos para la Universidad Tecnológica del Perú.
+
+---
+
+## 🎯 Comandos Rápidos
+
+```bash
+# Inicio rápido
+git clone https://github.com/Neison1301/PoliclinicoNSSC.git
+cd PoliclinicoNSSC
+copy .env.example .env
+# Editar .env con tus credenciales
+build.bat
+start.bat
+
+# Detener
+stop.bat
+
+# Limpiar todo
+cleanup.bat
+
+# Ver logs
+docker-compose logs -f
+
+# Reiniciar servicios
+docker-compose restart
+```
+
+---
+
+🏥 **Sistema desarrollado para mejorar la gestión de centros de salud con tecnología Java y Docker**

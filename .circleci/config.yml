@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  # Job 1: CI - Compilación y JAR (Pasos 1 & 2)
+  # Job 1: CI - Compilación y JAR 
   ci_maven_build:
     docker:
       - image: cimg/openjdk:21.0 # Entorno estable para Maven y Java
@@ -17,7 +17,7 @@ jobs:
           paths:
             - "*.jar"
 
-  # Job 2: DOCKER - Build y Push (Pasos 3 & 4)
+  # Job 2: DOCKER - Build y Push 
   docker_build_and_push:
     docker:
       # Usa cimg/base para comandos de bash y Docker
@@ -46,7 +46,7 @@ jobs:
             docker push $IMAGE_NAME:$IMAGE_TAG
             echo " Publicación de imagen Docker completada."
 
-  # Job 3: CD - Despliegue y Monitoreo Simulado (Pasos 5 & 6)
+  # Job 3: CD - Despliegue y Monitoreo Simulado
   cd_argocd_prometheus_simulated:
     docker:
       - image: cimg/base:2023.11
@@ -56,7 +56,7 @@ jobs:
           name: 5. Despliegue con Argo CD (SIMULACIÓN)
           command: |
             echo "*************************************************"
-            echo " CD: Simulación de Despliegue con Argo CD (Paso 5)"
+            echo " CD: Simulación de Despliegue con Argo CD "
             echo "El sistema GitOps fue notificado y el Despliegue está en curso."
             exit 0
             
@@ -65,7 +65,7 @@ jobs:
           name: 6. Monitoreo con Prometheus (SIMULACIÓN)
           command: |
             echo "*************************************************"
-            echo "Monitoreo con Prometheus (Paso 6)"
+            echo "Monitoreo con Prometheus "
             echo "Verificando el estado del servicio desplegado en Prometheus."
             exit 0
             
@@ -74,10 +74,10 @@ workflows:
   version: 2
   full_6_step_pipeline:
     jobs:
-      - ci_maven_build # CI (Pasos 1 & 2)
-      - docker_build_and_push: # Docker (Pasos 3 & 4)
+      - ci_maven_build # CI 
+      - docker_build_and_push: # Docker 
           requires:
             - ci_maven_build
-      - cd_argocd_prometheus_simulated: # CD y Monitoreo (Pasos 5 & 6)
+      - cd_argocd_prometheus_simulated: # CD y Monitoreo 
           requires:
             - docker_build_and_push # Se ejecuta solo si la Imagen Docker fue creada

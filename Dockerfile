@@ -1,16 +1,70 @@
-# Stage 1: Build the JAR (Usaremos Eclipse Temurin JDK 21)
+# ============================================
+# Stage 1: Build Stage
+# ============================================
 FROM eclipse-temurin:21-jdk-jammy AS builder
+
+# Metadata
+LABEL maintainer="Policlinico NSSC Team"
+LABEL description="Sistema de Gestión Policlínico NSSC - Build Stage"
+LABEL version="1.0"
+
 WORKDIR /app
 
-# Copia el JAR generado por Maven en el Job 'build' de CircleCI
-COPY target/*.jar app.jar
+# Copiar archivos de Maven
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
 
-# Stage 2: Create the final, smaller runtime image (Usaremos JRE 21)
+# Descargar dependencias (capa cacheada)
+RUN ./mvnw dependency:go-offline -B
+
+# Copiar código fuente
+COPY src ./src
+
+# Compilar la aplicación
+RUN ./mvnw clean package -DskipTests
+
+# ============================================
+# Stage 2: Runtime Stage
+# ============================================
 FROM eclipse-temurin:21-jre-jammy
+
+# Metadata
+LABEL maintainer="Policlinico NSSC Team"
+LABEL description="Sistema de Gestión Policlínico NSSC - Runtime"
+LABEL version="1.0"
+
 WORKDIR /app
 
-# Copia el JAR del stage 'builder'
-COPY --from=builder /app/app.jar /app/app.jar
+# Instalar curl para health checks
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Define el punto de entrada para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Crear usuario no-root para seguridad
+RUN groupadd -r spring && useradd -r -g spring spring
+
+# Copiar el JAR del stage builder
+COPY --from=builder /app/target/*.jar app.jar
+
+# Cambiar permisos
+RUN chown -R spring:spring /app
+
+# Cambiar a usuario no-root
+USER spring:spring
+
+# Exponer puerto
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8080/policlinico/actuator/health || exit 1
+
+# Punto de entrada con configuración JVM optimizada
+ENTRYPOINT ["java", \
+    "-XX:+UseContainerSupport", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "-jar", \
+    "app.jar"]
+

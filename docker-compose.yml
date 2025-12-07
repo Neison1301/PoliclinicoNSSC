@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Servicio de Base de Datos MySQL
+  mysql-db:
+    image: mysql:8.0
+    container_name: policlinico-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-policlinicosagrado}
+      MYSQL_USER: ${MYSQL_USER:-policlinico_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-policlinico_pass}
+    ports:
+      - "3307:3306"  # Puerto externo:interno (evita conflicto con MySQL local)
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d  # Scripts de inicialización (opcional)
+    networks:
+      - policlinico-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Servicio de Aplicación Spring Boot
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: policlinico-app
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      # Configuración de Base de Datos
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE:-policlinicosagrado}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-policlinico_user}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-policlinico_pass}
+      
+      # Configuración de Email
+      SPRING_MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      SPRING_MAIL_PORT: ${MAIL_PORT:-587}
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
+      
+      # Configuración de la Aplicación
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+    ports:
+      - "8080:8080"
+    networks:
+      - policlinico-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/policlinico/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+# Definición de Volúmenes
+volumes:
+  mysql-data:
+    driver: local
+    name: policlinico-mysql-data
+
+# Definición de Redes
+networks:
+  policlinico-network:
+    driver: bridge
+    name: policlinico-network

@@ -31,3 +31,27 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+
+### Windows ###
+*.lnk
+Thumbs.db
+Desktop.ini
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Carpetas vacías ###
+init-db/
+
+### Capturas de pantalla (opcional) ###
+capturas/*.png
+capturas/*.jpg
+!capturas/README.md
+
